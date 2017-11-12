@@ -7,10 +7,12 @@ class IncompleteDate
   }
 
   private static function excludeDay($format) {
+    // get rid of all symbols that represent day of month/week
     foreach (array('d','D','j','l','N','S','w','z') as $dayltr) {
       $format = preg_replace("/ $dayltr([^\w\s])/", '$1', $format);
       $format = preg_replace("/$dayltr/", '', $format);
     }
+    // get rid of punctuation at the beginning and the end
     $format = preg_replace("/^\s*[^\w\s]*\s*/", '', $format);
     $format = preg_replace("/\s*[^\w\s]*\s*$/", '', $format);
     return $format;
