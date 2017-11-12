@@ -3,7 +3,7 @@
 class IncompleteDate 
 {
   private static function yearOnly($format) {
-    return preg_replace('/[^lYy]/', '', $format);
+    return preg_replace('/[^LYy]/', '', $format);
   }
 
   private static function excludeDay($format) {
