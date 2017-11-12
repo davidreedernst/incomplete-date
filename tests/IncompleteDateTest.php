@@ -2,9 +2,6 @@
 
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers Email
- */
 final class IncompleteDateTest extends TestCase
 {
   public function testFormatIncompleteDateY() {
