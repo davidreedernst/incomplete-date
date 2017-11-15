@@ -79,11 +79,14 @@ final class IncompleteDateTest extends TestCase
   public function testStrToISODate() {
     $this->assertEquals('1952-01-11', IncompleteDate::strToISODate('January 11, 1952'));
     $this->assertEquals('1952-01-11', IncompleteDate::strToISODate('Jan 11, 1952'));
+    $this->assertEquals('1952-01-11', IncompleteDate::strToISODate('Jan 11 1952'));
     /* surprisingly, this doesn't work:   */
     /* echo date('F j, Y', strtotime('11 January, 1952')); => January 11, 2017 */
     /* $this->assertEquals('1952-01-11', IncompleteDate::strToISODate('11 January, 1952')); */
     /* but without the comma it does work */
     $this->assertEquals('1952-01-11', IncompleteDate::strToISODate('11 January 1952'));
+    $this->assertEquals('1952-01-11', IncompleteDate::strToISODate('11 Jan 1952'));
+    $this->assertEquals('1952-01-11', IncompleteDate::strToISODate('1952-01-11'));
     $this->assertEquals('1952-01-00', IncompleteDate::strToISODate('January, 1952'));
     $this->assertEquals('1952-01-00', IncompleteDate::strToISODate('January 1952'));
     $this->assertEquals('1952-01-00', IncompleteDate::strToISODate('1952, January'));
