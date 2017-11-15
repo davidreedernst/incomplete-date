@@ -67,4 +67,13 @@ final class IncompleteDateTest extends TestCase
     $this->assertEquals('...January 11, 1952...', IncompleteDate::format('1952-01-11', $format));
   }
 
+  public function testIncompleteDateFormatFjYFYY() {
+    $format1 = 'F j, Y';
+    $format2 = 'F Y';
+    $format3 = 'Y!';
+    $this->assertEquals('1950!', IncompleteDate::format('1950-00-00', $format1, $format2, $format3));
+    $this->assertEquals('January 1951', IncompleteDate::format('1951-01-00', $format1, $format2, $format3));
+    $this->assertEquals('January 11, 1952', IncompleteDate::format('1952-01-11', $format1, $format2, $format3));
+  }
+
 }

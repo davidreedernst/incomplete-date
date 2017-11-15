@@ -35,23 +35,23 @@ class IncompleteDate
     return $formatparts['prelude'] . $formatparts['format'] . $formatparts['postlude'];
   }
 
-  public static function format($datestr, $format) {
+  public static function format($datestr, $fullformat, $yearmonthformat = null, $yearonlyformat = null) {
     if (preg_match('/^(\d\d\d\d)\D?(\d\d)\D?(\d\d)$/', $datestr, $matches)) {
       $year = $matches[1];
       $mon = $matches[2];
       $day = $matches[3];
       if ($day == '00') {
 	if ($mon == '00') {
-	  $format = self::yearOnly($format);
+	  $format = empty($yearonlyformat) ? self::yearOnly($fullformat) : $yearonlyformat;
 	  $fakedate = "$year-11-11";
 	  return date($format, strtotime($fakedate));
 	} else {
-	  $format = self::excludeDay($format);
+	  $format = empty($yearmonthformat) ? self::excludeDay($fullformat) : $yearmonthformat;
 	  $fakedate = "$year-$mon-11";
 	  return date($format, strtotime($fakedate));
 	}
       } else {
-	return date($format, strtotime($datestr));
+	return date($fullformat, strtotime($datestr));
       }
     } else {
       return '';
