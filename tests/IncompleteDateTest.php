@@ -76,4 +76,31 @@ final class IncompleteDateTest extends TestCase
     $this->assertEquals('January 11, 1952', IncompleteDate::format('1952-01-11', $format1, $format2, $format3));
   }
 
+  public function testStrToISODate() {
+    $this->assertEquals('1952-01-11', IncompleteDate::strToISODate('January 11, 1952'));
+    $this->assertEquals('1952-01-11', IncompleteDate::strToISODate('Jan 11, 1952'));
+    /* surprisingly, this doesn't work:   */
+    /* echo date('F j, Y', strtotime('11 January, 1952')); => January 11, 2017 */
+    /* $this->assertEquals('1952-01-11', IncompleteDate::strToISODate('11 January, 1952')); */
+    /* but without the comma it does work */
+    $this->assertEquals('1952-01-11', IncompleteDate::strToISODate('11 January 1952'));
+    $this->assertEquals('1952-01-00', IncompleteDate::strToISODate('January, 1952'));
+    $this->assertEquals('1952-01-00', IncompleteDate::strToISODate('January 1952'));
+    $this->assertEquals('1952-01-00', IncompleteDate::strToISODate('1952, January'));
+    $this->assertEquals('1952-01-00', IncompleteDate::strToISODate('1952 January'));
+    $this->assertEquals('1952-01-00', IncompleteDate::strToISODate('01/1952'));
+    $this->assertEquals('1952-01-00', IncompleteDate::strToISODate('1952-01'));
+    $this->assertEquals('1952-01-00', IncompleteDate::strToISODate('1952/1'));
+    $this->assertEquals('1952-00-00', IncompleteDate::strToISODate('1952'));
+  }
+
+  public function testStrToISODateEmpty() {
+    $this->assertNull(IncompleteDate::strToISODate(''));
+  }
+
+  public function testStrToISODateBadMonth() {
+    $this->assertNull(IncompleteDate::strToISODate('Notamonthname, 1952'));
+    $this->assertNull(IncompleteDate::strToISODate('Notamonthname 11, 1952'));
+  }
+
 }

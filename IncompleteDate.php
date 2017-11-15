@@ -57,6 +57,55 @@ class IncompleteDate
       return '';
     }
   }
+
+  private static function formatTimeStampOrNull($format, $ts) {
+    if ($ts === false) {
+      return null;
+    } else {
+      return date($format, $ts);        
+    }
+  }
+
+  private static function formatTimeStringOrNull($format, $str) {
+    $ts = strtotime($str);
+    return self::formatTimeStampOrNull($format, $ts);
+  }
+
+  private static function yearMonthNameToISODate($sentyear, $sentmonthname) {
+    $fakestr = $sentmonthname . ' 10, ' . $sentyear;
+    return self::formatTimeStringOrNull("Y-m-00", $fakestr);
+  }
+    
+  private static function yearMonthNumToISODate($sentyear, $sentmonthnum) {
+    if (strlen($sentmonthnum) == 1) {
+      $sentmonthnum = '0' . $sentmonthnum;
+    }
+    $fakestr = "$sentyear-$sentmonthnum-10"; 
+    $ts = strtotime($fakestr);
+    return date("Y-m-00", $ts);
+  }
+
+  public static function strToISODate($sentstr) {
+    $str = trim($sentstr);
+    /* if the string is empty, don't bother running all the tests, just return null */
+    if (empty($str)) {
+      return null;
+    }
+
+    if (preg_match('/^(\d\d\d\d)$/', $str, $matches)) {
+      return $matches[1] . '-00-00';
+    } elseif (preg_match('/^([a-z]+)\W+(\d\d\d\d)$/i', $str, $matches)) { 
+      return self::yearMonthNameToISODate($matches[2], $matches[1]);
+    } elseif (preg_match('/^(\d\d\d\d)\W+([a-z]+)$/i', $str, $matches)) {
+      return self::yearMonthNameToISODate($matches[1], $matches[2]);
+    } elseif (preg_match('/^(\d\d?)\W+(\d\d\d\d)$/i', $str, $matches)) {
+      return self::yearMonthNumToISODate($matches[2], $matches[1]);
+    } elseif (preg_match('/^(\d\d\d\d)\W+(\d\d?)$/i', $str, $matches)) {
+      return self::yearMonthNumToISODate($matches[1], $matches[2]);
+    }
+    return self::formatTimeStringOrNull("Y-m-d", $str);
+  }
+
 }
 
 ?>
